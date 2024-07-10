@@ -2,7 +2,7 @@
 // https://docs.swift.org/swift-book
 
 import Foundation
-final class FileCachePackage<T: JSONParsable> {
+public final class FileCachePackage<T: JSONParsable> {
     
     public func saveInFile(items: [T], fileName: String) {
         let jsonDataArray = items.map({ $0.json })

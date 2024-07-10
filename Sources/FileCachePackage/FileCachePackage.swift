@@ -4,6 +4,8 @@
 import Foundation
 public final class FileCachePackage<T: JSONParsable> {
     
+    public init() {}
+    
     public func saveInFile(items: [T], fileName: String) {
         let jsonDataArray = items.map({ $0.json })
         

@@ -2,7 +2,7 @@
 // https://docs.swift.org/swift-book
 
 import Foundation
-public final class FileCachePackage<T: JSONParsable> {
+public final class FileCache<T: JSONParsable> {
     
     public init() {}
     

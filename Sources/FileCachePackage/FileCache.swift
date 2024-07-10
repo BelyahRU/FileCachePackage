@@ -1,30 +1,9 @@
 import Foundation
 
-final class FileCache {
-    private(set) var toDos: [TodoItem] = [
-    ]
+final class FileCache<T: JSONParsable> {
     
-    public func add(new task: TodoItem) {
-        //проверка на дублирование
-        if toDos.first(where: { $0.id == task.id }) != nil {
-            print("FileCache Error. Task added before")
-        } else{
-            toDos.append(task)
-        }
-    }
-    
-    public func removeTask(by id: String) {
-        toDos.removeAll(where: { $0.id == id })
-    }
-    
-    public func updateTask(_ item: TodoItem) {
-        if let index = toDos.firstIndex(where: { $0.id == item.id }) {
-            toDos[index] = item
-        }
-    }
-    
-    public func saveInFile(fileName: String) {
-        let jsonDataArray = toDos.map({ $0.json })
+    public func saveInFile(items: [T], fileName: String) {
+        let jsonDataArray = items.map({ $0.json })
         
         //getUrl(from: ) - extension for FileManager
         guard let url = FileManager.default.getUrl(from: fileName) else {
@@ -60,7 +39,7 @@ final class FileCache {
     }
     
     //Может быть нужно вернуть nil?
-    public func uploadFromFile(fileName: String) -> [TodoItem] {
+    public func uploadFromFile(fileName: String) -> [T] {
         //getUrl(from: ) - extension for FileManager
         guard let url = FileManager.default.getUrl(from: fileName) else {
             return []
@@ -74,7 +53,7 @@ final class FileCache {
         }
         do {
             let todosJson = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
-            return todosJson!.compactMap({ TodoItem.parse(json: $0) })
+            return todosJson!.compactMap({ T.parse(json: $0) })
         } catch {
             print("Error convert data to JSON: \(error.localizedDescription)")
             return []
